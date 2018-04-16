@@ -17,7 +17,7 @@ public class ReactNativeAudioPackage implements ReactPackage {
      * @param reactContext react application context that can be used to create modules
      * @return list of native modules to register with the newly created catalyst instance
      */
-    @Override
+    // @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
         modules.add(new AudioPlayerManager(reactContext));
@@ -30,7 +30,7 @@ public class ReactNativeAudioPackage implements ReactPackage {
      * @param reactContext
      * @return a list of view managers that should be registered with {UIManagerModule}
      */
-    @Override
+    // @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Collections.emptyList();
     }
