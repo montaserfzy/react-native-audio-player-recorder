@@ -1,11 +1,13 @@
 
 
 ### Fork 
-Here I updated the media pleyer for android 
+Here I updated the media player for android 
 - Play and Puase
 - Reset Player 
 - Kill current process if the other is start work 
+- Fixed the android build crash
 
+-------------------------
 
 
 
