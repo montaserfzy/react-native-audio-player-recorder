@@ -1,3 +1,4 @@
+
 package com.rnim.rn.audio;
 
 import android.content.Context;
@@ -103,6 +104,7 @@ class AudioPlayerManager extends ReactContextBaseJavaModule {
       promise.reject("PLAYER_NOT_PREPARED", "Please call startPlaying before stopping playback");
       return;
     }
+
     promise.resolve(mediaPlayer.getDuration());
   }
 
@@ -282,11 +284,20 @@ class AudioPlayerManager extends ReactContextBaseJavaModule {
   }
 
   private boolean preparePlaybackAtPath(String pathType, String path, Promise promise) {
-    if (mediaPlayer == null) {
-      mediaPlayer = new MediaPlayer();
-    } else {
-      mediaPlayer.reset();
+    if (mediaPlayer != null) {
+        mediaPlayer.release();
+        mediaPlayer = null;
+        isPlaying = false;
+        isPaused = false;
     }
+    mediaPlayer = new MediaPlayer();
+
+
+//    if (mediaPlayer == null) {
+//      mediaPlayer = new MediaPlayer();
+//    } else {
+//      mediaPlayer.reset();
+//    }
 
     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     try {
@@ -367,3 +378,5 @@ class AudioPlayerManager extends ReactContextBaseJavaModule {
     }
   }
 }
+
+
