@@ -1,3 +1,15 @@
+
+
+### Fork 
+Here I updated the media pleayer for android 
+- Play and Puase
+- Reset Player 
+- Kill current process if the other is start work 
+ 
+
+
+
+
 # React Native Audio Player Recorder [![npm version](https://badge.fury.io/js/react-native-audio-player-recorder.svg)](http://badge.fury.io/js/react-native-audio-player-recorder)
 
 [![NPM](https://nodei.co/npm/react-native-audio-player-recorder.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/react-native-audio-player-recorder/)
