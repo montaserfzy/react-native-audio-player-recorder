@@ -1,11 +1,11 @@
 
 
 ### Fork 
-Here I updated the media pleayer for android 
+Here I updated the media pleyer for android 
 - Play and Puase
 - Reset Player 
 - Kill current process if the other is start work 
- 
+
 
 
 
