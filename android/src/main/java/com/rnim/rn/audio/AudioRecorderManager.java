@@ -41,7 +41,6 @@ class AudioRecorderManager extends ReactContextBaseJavaModule {
   private boolean isRecording = false;
   private AudioPlayerManager audioPlayerManager;
 
-
   public AudioRecorderManager(ReactApplicationContext reactContext) {
     super(reactContext);
     this.context = reactContext;
@@ -52,12 +51,15 @@ class AudioRecorderManager extends ReactContextBaseJavaModule {
   public Map<String, Object> getConstants() {
     Map<String, Object> constants = new HashMap<>();
     constants.put(DocumentDirectoryPath, this.getReactApplicationContext().getFilesDir().getAbsolutePath());
-    constants.put(PicturesDirectoryPath, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+    constants.put(PicturesDirectoryPath,
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
     constants.put(MainBundlePath, "");
     constants.put(CachesDirectoryPath, this.getReactApplicationContext().getCacheDir().getAbsolutePath());
     constants.put(LibraryDirectoryPath, "");
-    constants.put(MusicDirectoryPath, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
-    constants.put(DownloadsDirectoryPath, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+    constants.put(MusicDirectoryPath,
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
+    constants.put(DownloadsDirectoryPath,
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
     return constants;
   }
 
@@ -68,15 +70,14 @@ class AudioRecorderManager extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void checkAuthorizationStatus(Promise promise) {
-    int permissionCheck = ContextCompat.checkSelfPermission(getCurrentActivity(),
-            Manifest.permission.RECORD_AUDIO);
+    int permissionCheck = ContextCompat.checkSelfPermission(getCurrentActivity(), Manifest.permission.RECORD_AUDIO);
     boolean permissionGranted = permissionCheck == PackageManager.PERMISSION_GRANTED;
     promise.resolve(permissionGranted);
   }
 
   @ReactMethod
   public void prepareRecordingAtPath(String recordingPath, ReadableMap recordingSettings, Promise promise) {
-    if (isRecording){
+    if (isRecording) {
       Log.e("INVALID_STATE", "Please call stopRecording before starting recording");
       promise.reject("INVALID_STATE", "Please call stopRecording before starting recording");
     }
@@ -92,9 +93,9 @@ class AudioRecorderManager extends ReactContextBaseJavaModule {
       recorder.setAudioChannels(recordingSettings.getInt("Channels"));
       recorder.setAudioEncodingBitRate(recordingSettings.getInt("AudioEncodingBitRate"));
       recorder.setOutputFile(recordingPath);
-    }
-    catch(final Exception e) {
-      promise.reject("COULDNT_CONFIGURE_MEDIA_RECORDER" , "Make sure you've added RECORD_AUDIO permission to your AndroidManifest.xml file "+e.getMessage());
+    } catch (final Exception e) {
+      promise.reject("COULDNT_CONFIGURE_MEDIA_RECORDER",
+          "Make sure you've added RECORD_AUDIO permission to your AndroidManifest.xml file " + e.getMessage());
       return;
     }
 
@@ -103,72 +104,77 @@ class AudioRecorderManager extends ReactContextBaseJavaModule {
       recorder.prepare();
       promise.resolve(currentOutputFile);
     } catch (final Exception e) {
-      promise.reject("COULDNT_PREPARE_RECORDING_AT_PATH "+recordingPath, e.getMessage());
+      promise.reject("COULDNT_PREPARE_RECORDING_AT_PATH " + recordingPath, e.getMessage());
     }
 
   }
 
   private int getAudioEncoderFromString(String audioEncoder) {
-   switch (audioEncoder) {
-     case "aac":
-       return MediaRecorder.AudioEncoder.AAC;
-     case "aac_eld":
-       return MediaRecorder.AudioEncoder.AAC_ELD;
-     case "amr_nb":
-       return MediaRecorder.AudioEncoder.AMR_NB;
-     case "amr_wb":
-       return MediaRecorder.AudioEncoder.AMR_WB;
-     case "he_aac":
-       return MediaRecorder.AudioEncoder.HE_AAC;
-     case "vorbis":
+    switch (audioEncoder) {
+    case "aac":
+      return MediaRecorder.AudioEncoder.AAC;
+    case "aac_eld":
+      return MediaRecorder.AudioEncoder.AAC_ELD;
+    case "amr_nb":
+      return MediaRecorder.AudioEncoder.AMR_NB;
+    case "amr_wb":
+      return MediaRecorder.AudioEncoder.AMR_WB;
+    case "he_aac":
+      return MediaRecorder.AudioEncoder.HE_AAC;
+    case "vorbis":
       return MediaRecorder.AudioEncoder.VORBIS;
-     default:
-       Log.d("INVALID_AUDIO_ENCODER", "USING MediaRecorder.AudioEncoder.DEFAULT instead of "+audioEncoder+": "+MediaRecorder.AudioEncoder.DEFAULT);
-       return MediaRecorder.AudioEncoder.DEFAULT;
-   }
+    default:
+      Log.d("INVALID_AUDIO_ENCODER", "USING MediaRecorder.AudioEncoder.DEFAULT instead of " + audioEncoder + ": "
+          + MediaRecorder.AudioEncoder.DEFAULT);
+      return MediaRecorder.AudioEncoder.DEFAULT;
+    }
   }
 
   private int getOutputFormatFromString(String outputFormat) {
     switch (outputFormat) {
-      case "mpeg_4":
-        return MediaRecorder.OutputFormat.MPEG_4;
-      case "aac_adts":
-        return MediaRecorder.OutputFormat.AAC_ADTS;
-      case "amr_nb":
-        return MediaRecorder.OutputFormat.AMR_NB;
-      case "amr_wb":
-        return MediaRecorder.OutputFormat.AMR_WB;
-      case "three_gpp":
-        return MediaRecorder.OutputFormat.THREE_GPP;
-      case "webm":
-        return MediaRecorder.OutputFormat.WEBM;
-      default:
-        Log.d("INVALID_OUPUT_FORMAT", "USING MediaRecorder.OutputFormat.DEFAULT : "+MediaRecorder.OutputFormat.DEFAULT);
-        return MediaRecorder.OutputFormat.DEFAULT;
+    case "mpeg_4":
+      return MediaRecorder.OutputFormat.MPEG_4;
+    case "aac_adts":
+      return MediaRecorder.OutputFormat.AAC_ADTS;
+    case "amr_nb":
+      return MediaRecorder.OutputFormat.AMR_NB;
+    case "amr_wb":
+      return MediaRecorder.OutputFormat.AMR_WB;
+    case "three_gpp":
+      return MediaRecorder.OutputFormat.THREE_GPP;
+    case "webm":
+      return MediaRecorder.OutputFormat.WEBM;
+    default:
+      Log.d("INVALID_OUPUT_FORMAT", "USING MediaRecorder.OutputFormat.DEFAULT : " + MediaRecorder.OutputFormat.DEFAULT);
+      return MediaRecorder.OutputFormat.DEFAULT;
 
     }
   }
 
   @ReactMethod
-  public void startRecording(Promise promise){
-    if (recorder == null){
+  public void startRecording(Promise promise) {
+    if (recorder == null) {
       Log.e("RECORDING_NOT_PREPARED", "Please call prepareRecordingAtPath before starting recording");
       promise.reject("RECORDING_NOT_PREPARED", "Please call prepareRecordingAtPath before starting recording");
       return;
     }
-    if (isRecording){
+    if (isRecording) {
       Log.e("INVALID_STATE", "Please call stopRecording before starting recording");
       promise.reject("INVALID_STATE", "Please call stopRecording before starting recording");
       return;
     }
-    recorder.start();
-    isRecording = true;
+    try {
+      recorder.start();
+      isRecording = true;
+    } catch (final Exception e) {
+      promise.reject("INVALID_STATE", "Error Monty --> I dont know why happen <-- = " + e.getMessage());
+    }
     promise.resolve(currentOutputFile);
   }
 
   @ReactMethod
-  public void stopRecording(Promise promise){
-    if (!isRecording){
+  public void stopRecording(Promise promise) {
+    if (!isRecording) {
       Log.e("INVALID_STATE", "Please call startRecording before stopping recording");
       promise.reject("INVALID_STATE", "Please call startRecording before stopping recording");
       return;
@@ -181,23 +187,24 @@ class AudioRecorderManager extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void pauseRecording(Promise promise){
-    // Added this function to have the same api for android and iOS, stops recording now
+  public void pauseRecording(Promise promise) {
+    // Added this function to have the same api for android and iOS, stops recording
+    // now
     stopRecording(promise);
   }
 
   @ReactMethod
-  public void stopPlaying(Promise promise){
+  public void stopPlaying(Promise promise) {
     audioPlayerManager.stop(promise);
   }
 
   @ReactMethod
-  public void pausePlaying(Promise promise){
+  public void pausePlaying(Promise promise) {
     audioPlayerManager.pause(promise);
   }
 
   @ReactMethod
-  public void unpausePlaying(Promise promise){
+  public void unpausePlaying(Promise promise) {
     audioPlayerManager.unpause(promise);
   }
 
@@ -206,12 +213,9 @@ class AudioRecorderManager extends ReactContextBaseJavaModule {
     audioPlayerManager.play(currentOutputFile, null, promise);
   }
 
-
   private void sendEvent(String eventName, Object params) {
-    getReactApplicationContext()
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .emit(eventName, params);
+    getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName,
+        params);
   }
-
 
 }
